@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Agai Actions · Operations System</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --cream:#f5f0e8;--cream2:#ede8de;--cream3:#e4ddd1;
+  --ink:#1a1612;--ink2:#2e2820;--ink3:#3d3529;
+  --gold:#9a7340;--gold-l:#c9a96e;--gold-d:#b8965a;
+  --text:#2a2218;--muted:#6a5e52;--border:rgba(154,115,64,0.2);
+  --green:#2d7a5a;--red:#b03030;--blue:#2d5a8a;--white:#faf8f4;
+}
+html{scroll-behavior:smooth;}
+body{background:var(--cream);color:var(--text);font-family:'DM Sans',sans-serif;font-weight:400;line-height:1.7;padding:0;}
+
+/* HEADER */
+.header{background:var(--ink);border-bottom:1px solid rgba(201,169,110,0.2);padding:18px 24px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;}
+.header-brand{font-family:'Playfair Display',serif;font-size:18px;font-weight:600;color:var(--gold-l);}
+.header-sub{font-size:9px;color:#666;letter-spacing:2px;text-transform:uppercase;margin-top:2px;}
+.badge{background:rgba(201,169,110,0.12);border:1px solid rgba(201,169,110,0.25);border-radius:20px;padding:5px 14px;font-size:9px;color:var(--gold-l);letter-spacing:2px;text-transform:uppercase;}
+
+/* HERO */
+.hero{background:var(--ink);padding:64px 24px 52px;text-align:center;position:relative;overflow:hidden;}
+.hero::before{content:'';position:absolute;top:-80px;left:50%;transform:translateX(-50%);width:500px;height:500px;background:radial-gradient(circle,rgba(201,169,110,0.07) 0%,transparent 70%);pointer-events:none;}
+.hero-eyebrow{font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--gold-d);margin-bottom:18px;}
+.hero-title{font-family:'Playfair Display',serif;font-size:clamp(28px,6vw,48px);font-weight:400;color:#f0ebe0;line-height:1.1;margin-bottom:14px;}
+.hero-title em{font-style:italic;color:var(--gold-l);}
+.hero-desc{font-size:13px;color:#888;max-width:500px;margin:0 auto 32px;line-height:1.9;}
+.hero-goal{display:inline-block;background:rgba(201,169,110,0.1);border:1px solid rgba(201,169,110,0.25);border-radius:8px;padding:12px 22px;font-size:13px;color:var(--gold-l);font-style:italic;}
+
+/* TOC */
+.toc-wrap{max-width:680px;margin:0 auto;padding:36px 20px;}
+.toc-title{font-family:'Playfair Display',serif;font-size:14px;font-weight:600;color:var(--ink);margin-bottom:16px;letter-spacing:1px;text-transform:uppercase;}
+.toc-grid{display:flex;gap:6px;flex-wrap:wrap;}
+.toc-item{display:flex;align-items:center;gap:8px;padding:8px 14px;background:var(--white);border:1px solid var(--border);border-radius:20px;cursor:pointer;transition:all .2s;text-decoration:none;white-space:nowrap;}
+.toc-item:hover{border-color:var(--gold);background:rgba(154,115,64,0.04);}
+.toc-num{font-size:9px;letter-spacing:2px;color:var(--gold-d);font-weight:600;min-width:24px;}
+.toc-label{font-size:12px;color:var(--ink3);font-weight:500;}
+
+/* MAIN */
+.main{max-width:680px;margin:0 auto;padding:0 20px 80px;}
+
+/* BLOCK */
+.block{background:var(--white);border:1px solid var(--border);border-radius:12px;padding:28px 24px;margin-bottom:14px;position:relative;}
+.block-eyebrow{font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--gold-d);margin-bottom:8px;font-weight:600;}
+.block-title{font-family:'Playfair Display',serif;font-size:22px;font-weight:600;color:var(--ink);margin-bottom:18px;line-height:1.2;}
+.block-title em{font-style:italic;color:var(--gold);}
+.back{display:inline-block;margin-top:20px;font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);text-decoration:none;border-bottom:1px solid var(--border);padding-bottom:2px;transition:color .2s;}
+.back:hover{color:var(--gold);}
+
+/* NOTE / WARNING */
+.note{background:rgba(154,115,64,0.07);border-left:3px solid var(--gold);border-radius:0 8px 8px 0;padding:12px 16px;margin:14px 0;font-size:13px;color:var(--ink);line-height:1.8;}
+.note strong{font-weight:600;}
+.warning{background:rgba(176,48,48,0.05);border-left:3px solid var(--red);border-radius:0 8px 8px 0;padding:12px 16px;margin:14px 0;font-size:13px;color:var(--ink);line-height:1.8;}
+.warning strong{font-weight:600;color:var(--red);}
+
+/* FORMULA */
+.formula{background:var(--ink);border-radius:10px;padding:18px 20px;margin:14px 0;text-align:center;}
+.formula-text{font-family:'DM Mono',monospace;font-size:14px;color:var(--gold-l);letter-spacing:.5px;line-height:1.8;}
+
+/* PRINCIPLE */
+.principle{display:flex;gap:14px;padding:14px 16px;background:var(--cream2);border-radius:8px;margin-bottom:8px;border-left:3px solid var(--gold);}
+.principle-num{font-family:'Playfair Display',serif;font-size:22px;color:var(--gold);line-height:1;min-width:24px;}
+.principle-title{font-size:13px;font-weight:600;color:var(--ink);margin-bottom:3px;}
+.principle-text{font-size:12px;color:var(--muted);line-height:1.65;}
+
+/* PIPELINE */
+.pipeline{display:flex;flex-wrap:wrap;gap:0;margin:14px 0;}
+.pipe-step{background:var(--cream2);border:1px solid var(--border);padding:8px 14px;font-size:11px;color:var(--ink3);font-weight:500;display:flex;align-items:center;gap:6px;flex:1;min-width:100px;justify-content:center;}
+.pipe-step:first-child{border-radius:8px 0 0 8px;}
+.pipe-step:last-child{border-radius:0 8px 8px 0;}
+.pipe-arrow{color:var(--gold-d);font-size:10px;flex-shrink:0;}
+
+/* STATUS GRID */
+.status-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin:14px 0;}
+.status{background:var(--cream2);border:1px solid var(--border);border-radius:6px;padding:8px 12px;display:flex;align-items:center;gap:8px;font-size:12px;color:var(--ink3);}
+.status-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
+
+/* ROLES GRID */
+.roles-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:14px 0;}
+.role-card{background:var(--cream2);border:1px solid var(--border);border-radius:10px;padding:16px;}
+.role-name{font-family:'Playfair Display',serif;font-size:17px;color:var(--ink);margin-bottom:10px;}
+.role-list{list-style:none;}
+.role-list li{font-size:12px;color:var(--ink3);padding:5px 0;border-bottom:1px solid rgba(0,0,0,0.05);display:flex;gap:8px;line-height:1.5;}
+.role-list li:last-child{border-bottom:none;}
+.role-list li::before{content:'→';color:var(--gold-d);flex-shrink:0;}
+
+/* CHECKLIST */
+.checklist{list-style:none;}
+.checklist li{font-size:13px;color:var(--ink);padding:8px 0;border-bottom:1px solid var(--border);display:flex;align-items:flex-start;gap:10px;line-height:1.6;}
+.checklist li:last-child{border-bottom:none;}
+.checklist li::before{content:'✓';color:var(--green);font-size:11px;margin-top:3px;flex-shrink:0;font-weight:700;}
+
+/* CREW */
+.crew-box{background:rgba(154,115,64,0.06);border:1px solid rgba(154,115,64,0.2);border-radius:10px;padding:18px;margin:14px 0;text-align:center;}
+.crew-num{font-family:'Playfair Display',serif;font-size:42px;font-weight:300;color:var(--gold-l);line-height:1;}
+.crew-label{font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-top:4px;}
+
+/* QC GRID */
+.qc-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:14px 0;}
+.qc-item{background:var(--cream2);border:1px solid var(--border);border-radius:8px;padding:12px 14px;font-size:12px;color:var(--ink3);display:flex;align-items:center;gap:8px;}
+.qc-item::before{content:'◉';color:var(--gold-d);font-size:10px;flex-shrink:0;}
+
+/* SPEED */
+.speed-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin:14px 0;}
+.speed-card{background:var(--ink);border-radius:10px;padding:16px;text-align:center;}
+.speed-val{font-family:'Playfair Display',serif;font-size:22px;color:var(--gold-l);margin-bottom:4px;line-height:1;}
+.speed-label{font-size:9px;letter-spacing:2px;text-transform:uppercase;color:#888;}
+.speed-desc{font-size:11px;color:#666;margin-top:6px;}
+
+/* STAGE */
+.stage-grid{display:grid;gap:8px;margin:14px 0;}
+.stage{background:var(--cream2);border:1px solid var(--border);border-radius:8px;padding:14px 16px;display:flex;align-items:center;gap:14px;}
+.stage-num{font-family:'Playfair Display',serif;font-size:28px;color:var(--gold);min-width:32px;line-height:1;}
+.stage-title{font-size:13px;font-weight:600;color:var(--ink);margin-bottom:3px;}
+.stage-text{font-size:12px;color:var(--muted);}
+
+/* KPI */
+.kpi-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin:14px 0;}
+.kpi{background:var(--cream2);border:1px solid var(--border);border-radius:6px;padding:10px 12px;font-size:12px;color:var(--ink3);display:flex;align-items:center;gap:8px;}
+.kpi::before{content:'◈';color:var(--gold-d);font-size:10px;flex-shrink:0;}
+
+/* FINAL */
+.final-formula{background:var(--ink);border-radius:12px;padding:28px 24px;text-align:center;margin:14px 0;}
+.final-formula-text{font-family:'Playfair Display',serif;font-size:clamp(18px,4vw,26px);color:var(--gold-l);line-height:1.5;font-style:italic;}
+.final-formula-sub{font-size:12px;color:#777;margin-top:12px;line-height:1.8;}
+
+/* RISK */
+.risk{background:rgba(176,48,48,0.05);border:1px solid rgba(176,48,48,0.15);border-radius:8px;padding:12px 16px;margin-bottom:8px;display:flex;gap:12px;align-items:flex-start;}
+.risk-dot{width:6px;height:6px;border-radius:50%;background:var(--red);flex-shrink:0;margin-top:6px;}
+.risk-text{font-size:13px;color:var(--ink3);line-height:1.6;}
+
+/* SCROLL TOP */
+#scrollTop{display:none;position:fixed;bottom:24px;right:20px;width:44px;height:44px;border-radius:50%;background:var(--ink);border:1px solid var(--gold-d);color:var(--gold-l);font-size:18px;cursor:pointer;z-index:999;box-shadow:0 2px 12px rgba(0,0,0,0.2);}
+
+@media(max-width:600px){
+  .toc-grid,.roles-grid,.qc-grid,.speed-grid,.kpi-grid,.status-grid{grid-template-columns:1fr;}
+  .pipeline{flex-direction:column;}
+  .pipe-step{border-radius:6px !important;}
+}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div><div class="header-brand">Agai Actions</div><div class="header-sub">Brand Intelligence HQ</div></div>
+  <div class="badge">06 · Operations</div>
+</div>
+
+<button id="scrollTop" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-eyebrow">Блок 06 · Операционная система</div>
+  <h1 class="hero-title">Agai Actions —<br><em>Operations System</em></h1>
+  <p class="hero-desc">Операционная система масштабируемого wallpaper-бизнеса с целью 15 проектов в неделю при среднем чеке $5,000+</p>
+  <div class="hero-goal">System → Process → Teams → Scale</div>
+</div>
+
+<!-- TOC -->
+<div class="toc-wrap">
+  <div class="toc-title">Содержание</div>
+  <div class="toc-grid">
+    <div class="toc-item" onclick="goTo('s01')"><span class="toc-num">01</span><span class="toc-label">Философия операционки</span></div>
+    <div class="toc-item" onclick="goTo('s02')"><span class="toc-num">02</span><span class="toc-label">Бизнес-модель</span></div>
+    <div class="toc-item" onclick="goTo('s03')"><span class="toc-num">03</span><span class="toc-label">Pipeline и CRM</span></div>
+    <div class="toc-item" onclick="goTo('s04')"><span class="toc-num">04</span><span class="toc-label">Роли и управление</span></div>
+    <div class="toc-item" onclick="goTo('s05')"><span class="toc-num">05</span><span class="toc-label">Структура бригад</span></div>
+    <div class="toc-item" onclick="goTo('s06')"><span class="toc-num">06</span><span class="toc-label">Контроль качества</span></div>
+    <div class="toc-item" onclick="goTo('s07')"><span class="toc-num">07</span><span class="toc-label">Стандарты скорости</span></div>
+    <div class="toc-item" onclick="goTo('s08')"><span class="toc-num">08</span><span class="toc-label">Финансовый контроль</span></div>
+    <div class="toc-item" onclick="goTo('s09')"><span class="toc-num">09</span><span class="toc-label">План масштаба</span></div>
+    <div class="toc-item" onclick="goTo('s10')"><span class="toc-num">10</span><span class="toc-label">Риски и слабые места</span></div>
+    <div class="toc-item" onclick="goTo('s11')"><span class="toc-num">11</span><span class="toc-label">Система KPI</span></div>
+    <div class="toc-item" onclick="goTo('s12')"><span class="toc-num">12</span><span class="toc-label">Итоговый свод</span></div>
+  </div>
+</div>
+
+<!-- MAIN -->
+<div class="main">
+
+  <!-- 01 -->
+  <div class="block" id="s01">
+    <div class="block-eyebrow">01</div>
+    <div class="block-title">Operating <em>Philosophy</em></div>
+    <div class="note"><strong>Главный принцип:</strong> любой проект должен быть воспроизводим.</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:14px 0;">
+      <div class="principle" style="margin-bottom:0;"><div class="principle-num">→</div><div><div class="principle-title">Масштабируемость</div><div class="principle-text">Операционка должна быть построена вокруг масштабируемости.</div></div></div>
+      <div class="principle" style="margin-bottom:0;"><div class="principle-num">→</div><div><div class="principle-title">Три цели</div><div class="principle-text">Качество, скорость, предсказуемость.</div></div></div>
+    </div>
+    <div class="note" style="margin-top:14px;"><strong>Aram и Rahman</strong> в будущем не работают руками на объектах, а управляют системой, качеством, продажами и ростом. Владельцы — не исполнители, а управляющие системой.</div>
+    <a href="javascript:void(0)" onclick="window.scrollTo({top:0,behavior:'smooth'})" class="back">↑ Наверх</a>
+  </div>
+
+  <!-- 02 -->
+  <div class="block" id="s02">
+    <div class="block-eyebrow">02</div>
+    <div class="block-title">Business <em>Model</em></div>
+    <div class="pipeline">
+      <div class="pipe-step">Lead</div>
+      <div class="pipe-step">Qualification</div>
+      <div class="pipe-step">Estimate</div>
+      <div class="pipe-step">Sale</div>
+      <div class="pipe-step">Prep</div>
+      <div class="pipe-step">Install</div>
+      <div class="pipe-step">Close</div>
+      <div class="pipe-step">Review</div>
+    </div>
+    <div style="margin-top:16px;font-size:12px;color:var(--muted);margin-bottom:10px;letter-spacing:.5px;">Компания продаёт полный пакет:</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+      <div style="background:rgba(154,115,64,0.06);border:1px solid rgba(154,115,64,0.2);border-radius:8px;padding:12px 14px;display:flex;align-items:center;gap:10px;font-size:13px;color:var(--ink3);">
+        <span style="font-size:16px;">🎨</span> Дизайн
+      </div>
+      <div style="background:rgba(154,115,64,0.06);border:1px solid rgba(154,115,64,0.2);border-radius:8px;padding:12px 14px;display:flex;align-items:center;gap:10px;font-size:13px;color:var(--ink3);">
+        <span style="font-size:16px;">📦</span> Обои
+      </div>
+      <div style="background:rgba(154,115,64,0.06);border:1px solid rgba(154,115,64,0.2);border-radius:8px;padding:12px 14px;display:flex;align-items:center;gap:10px;font-size:13px;color:var(--ink3);">
+        <span style="font-size:16px;">🔧</span> Подготовка
+      </div>
+      <div style="background:rgba(154,115,64,0.06);border:1px solid rgba(154,115,64,0.2);border-radius:8px;padding:12px 14px;display:flex;align-items:center;gap:10px;font-size:13px;color:var(--ink3);">
+        <span style="font-size:16px;">✅</span> Установка
+      </div>
+    </div>
+    <div class="note" style="margin-top:14px;">Это увеличивает средний чек и снижает ценовую конкуренцию.</div>
+    <a href="javascript:void(0)" onclick="window.scrollTo({top:0,behavior:'smooth'})" class="back">↑ Наверх</a>
+  </div>
+
+  <!-- 03 -->
+  <div class="block" id="s03">
+    <div class="block-eyebrow">03</div>
+    <div class="block-title">Pipeline <em>& CRM</em></div>
+    <div style="font-size:12px;color:var(--muted);margin-bottom:12px;">Каждый клиент проходит через статусы:</div>
+    <div class="status-grid">
+      <div class="status"><div class="status-dot" style="background:#aaa;"></div>New Lead</div>
+      <div class="status"><div class="status-dot" style="background:var(--gold-d);"></div>Contacted</div>
+      <div class="status"><div class="status-dot" style="background:#c9a030;"></div>Qualified</div>
+      <div class="status"><div class="status-dot" style="background:var(--blue);"></div>Estimate Sent</div>
+      <div class="status"><div class="status-dot" style="background:#7040a0;"></div>Negotiation</div>
+      <div class="status"><div class="status-dot" style="background:#4080c0;"></div>Booked</div>
+      <div class="status"><div class="status-dot" style="background:#c09050;"></div>In Progress</div>
+      <div class="status"><div class="status-dot" style="background:var(--green);"></div>Completed</div>
+      <div class="status" style="grid-column:span 2;"><div class="status-dot" style="background:#2d7a5a;"></div>Review Requested</div>
+    </div>
+    <div class="warning"><strong>Правило:</strong> если нет статуса — нет контроля.</div>
+    <a href="javascript:void(0)" onclick="window.scrollTo({top:0,behavior:'smooth'})" class="back">↑ Наверх</a>
+  </div>
+
+  <!-- 04 -->
+  <div class="block" id="s04">
+    <div class="block-eyebrow">04</div>
+    <div class="block-title">Roles <em>& Management</em></div>
+    <div class="roles-grid">
+      <div class="role-card">
+        <div class="role-name">Aram</div>
+        <ul class="role-list">
+          <li>Продажи</li>
+          <li>Коммуникация</li>
+          <li>Закрытие сделок</li>
+          <li>Pricing</li>
+          <li>Lead management</li>
+          <li>Финансовая видимость</li>
+          <li>Общий контроль системы</li>
+        </ul>
+      </div>
+      <div class="role-card">
+        <div class="role-name">Rahman</div>
+        <ul class="role-list">
+          <li>Контроль качества</li>
+          <li>Обучение установщиков</li>
+          <li>Контроль исполнения</li>
+          <li>Supervision production</li>
+          <li>Field problem solving</li>
+        </ul>
+      </div>
+    </div>
+    <div style="font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:10px;font-weight:600;">В будущем</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;">
+      <div style="background:var(--cream2);border:1px solid var(--border);border-radius:6px;padding:10px 12px;font-size:12px;color:var(--ink3);">Project manager / operations coordinator</div>
+      <div style="background:var(--cream2);border:1px solid var(--border);border-radius:6px;padding:10px 12px;font-size:12px;color:var(--ink3);">Install crews</div>
+      <div style="background:var(--cream2);border:1px solid var(--border);border-radius:6px;padding:10px 12px;font-size:12px;color:var(--ink3);">Possible sales support</div>
+      <div style="background:var(--cream2);border:1px solid var(--border);border-radius:6px;padding:10px 12px;font-size:12px;color:var(--ink3);">Централизованный quality control</div>
+    </div>
+    <a href="javascript:void(0)" onclick="window.scrollTo({top:0,behavior:'smooth'})" class="back">↑ Наверх</a>
+  </div>
+
+  <!-- 05 -->
+  <div class="block" id="s05">
+    <div class="block-eyebrow">05</div>
+    <div class="block-title">Crew <em>Structure</em></div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px;">
+      <div class="crew-box">
+        <div class="crew-num">15</div>
+        <div class="crew-label">Проектов в неделю · цель</div>
+      </div>
+      <div class="crew-box">
+        <div class="crew-num">$5,000+</div>
+        <div class="crew-label">Средний чек · цель</div>
+      </div>
+    </div>
+    <div class="note" style="margin-bottom:14px;">Для достижения цели нужно минимум <strong>3–4 бригады</strong>.</div>
+    <div style="font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:10px;font-weight:600;">Каждая бригада</div>
+    <ul class="checklist">
+      <li>2 человека</li>
+      <li>Полный комплект инструментов</li>
+      <li>Одинаковый стандарт работы</li>
+      <li>Одинаковое качество</li>
+    </ul>
+    <div class="note" style="margin-top:14px;"><strong>Ключевая идея:</strong> масштаб достигается через команды, а не через личное усилие владельцев.</div>
+    <a href="javascript:void(0)" onclick="window.scrollTo({top:0,behavior:'smooth'})" class="back">↑ Наверх</a>
+  </div>
+
+  <!-- 06 -->
+  <div class="block" id="s06">
+    <div class="block-eyebrow">06</div>
+    <div class="block-title">Quality <em>Control</em></div>
+    <div style="font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:10px;font-weight:600;">Обязательные элементы документации</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:16px;">
+      <div style="background:rgba(45,122,90,0.06);border:1px solid rgba(45,122,90,0.2);border-radius:6px;padding:10px 12px;font-size:12px;color:var(--ink3);display:flex;gap:8px;align-items:center;"><span style="color:var(--green);">📷</span>Фото до</div>
+      <div style="background:rgba(45,122,90,0.06);border:1px solid rgba(45,122,90,0.2);border-radius:6px;padding:10px 12px;font-size:12px;color:var(--ink3);display:flex;gap:8px;align-items:center;"><span style="color:var(--green);">📷</span>Фото в процессе prep</div>
+      <div style="background:rgba(45,122,90,0.06);border:1px solid rgba(45,122,90,0.2);border-radius:6px;padding:10px 12px;font-size:12px;color:var(--ink3);display:flex;gap:8px;align-items:center;"><span style="color:var(--green);">📷</span>Фото в процессе install</div>
+      <div style="background:rgba(45,122,90,0.06);border:1px solid rgba(45,122,90,0.2);border-radius:6px;padding:10px 12px;font-size:12px;color:var(--ink3);display:flex;gap:8px;align-items:center;"><span style="color:var(--green);">📷</span>Фото после</div>
+      <div style="background:rgba(45,122,90,0.06);border:1px solid rgba(45,122,90,0.2);border-radius:6px;padding:10px 12px;font-size:12px;color:var(--ink3);display:flex;gap:8px;align-items:center;grid-column:span 2;"><span style="color:var(--green);">✅</span>Финальный чек-лист</div>
+    </div>
+    <div style="font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:10px;font-weight:600;">Проверяется</div>
+    <div class="qc-grid">
+      <div class="qc-item">Швы</div>
+      <div class="qc-item">Pattern alignment</div>
+      <div class="qc-item">Пузыри</div>
+      <div class="qc-item">Края</div>
+      <div class="qc-item">Углы</div>
+      <div class="qc-item">Чистота</div>
+      <div class="qc-item" style="grid-column:span 2;">Финальный вид</div>
+    </div>
+    <div class="warning" style="margin-top:14px;"><strong>Правило:</strong> если сомневаешься — переделывай.</div>
+    <a href="javascript:void(0)" onclick="window.scrollTo({top:0,behavior:'smooth'})" class="back">↑ Наверх</a>
+  </div>
+
+  <!-- 07 -->
+  <div class="block" id="s07">
+    <div class="block-eyebrow">07</div>
+    <div class="block-title">Speed <em>& Response Standards</em></div>
+    <div class="speed-grid">
+      <div class="speed-card">
+        <div class="speed-val">5–10 мин</div>
+        <div class="speed-label">Ответ на лид</div>
+      </div>
+      <div class="speed-card">
+        <div class="speed-val">Тот же день</div>
+        <div class="speed-label">Estimate</div>
+      </div>
+      <div class="speed-card">
+        <div class="speed-val">До 24 ч</div>
+        <div class="speed-label">Follow-up</div>
+      </div>
+    </div>
+    <div class="note" style="margin-top:14px;"><strong>Главный принцип:</strong> скорость = деньги.</div>
+    <a href="javascript:void(0)" onclick="window.scrollTo({top:0,behavior:'smooth'})" class="back">↑ Наверх</a>
+  </div>
+
+  <!-- 08 -->
+  <div class="block" id="s08">
+    <div class="block-eyebrow">08</div>
+    <div class="block-title">Financial <em>Control</em></div>
+    <div class="formula">
+      <div class="formula-text">Profit = Revenue – (Labor + Materials + Time + Overhead)</div>
+    </div>
+    <div style="font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin:14px 0 10px;font-weight:600;">На каждый проект фиксируются</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;">
+      <div style="background:var(--cream2);border:1px solid var(--border);border-radius:6px;padding:10px 12px;font-size:12px;color:var(--ink3);">Выручка</div>
+      <div style="background:var(--cream2);border:1px solid var(--border);border-radius:6px;padding:10px 12px;font-size:12px;color:var(--ink3);">Стоимость материалов</div>
+      <div style="background:var(--cream2);border:1px solid var(--border);border-radius:6px;padding:10px 12px;font-size:12px;color:var(--ink3);">Стоимость labor</div>
+      <div style="background:var(--cream2);border:1px solid var(--border);border-radius:6px;padding:10px 12px;font-size:12px;color:var(--ink3);">Время crew</div>
+      <div style="background:var(--cream2);border:1px solid var(--border);border-radius:6px;padding:10px 12px;font-size:12px;color:var(--ink3);">Дополнительные расходы</div>
+      <div style="background:var(--cream2);border:1px solid var(--border);border-radius:6px;padding:10px 12px;font-size:12px;color:var(--ink3);">Валовая прибыль</div>
+      <div style="background:rgba(45,122,90,0.07);border:1px solid rgba(45,122,90,0.2);border-radius:6px;padding:10px 12px;font-size:12px;color:var(--ink3);grid-column:span 2;font-weight:500;">Фактическая маржа</div>
+    </div>
+    <a href="javascript:void(0)" onclick="window.scrollTo({top:0,behavior:'smooth'})" class="back">↑ Наверх</a>
+  </div>
+
+  <!-- 09 -->
+  <div class="block" id="s09">
+    <div class="block-eyebrow">09</div>
+    <div class="block-title">Scale <em>Plan</em></div>
+    <div class="stage-grid">
+      <div class="stage">
+        <div class="stage-num">1</div>
+        <div><div class="stage-title">Stage 1 — Ручной режим</div><div class="stage-text">Основатели работают напрямую, строим систему и стандарты.</div></div>
+      </div>
+      <div class="stage" style="border-color:rgba(45,122,90,0.3);background:rgba(45,122,90,0.04);">
+        <div class="stage-num" style="color:var(--green);">2</div>
+        <div><div class="stage-title">Stage 2 — 2 бригады</div><div class="stage-text">Делегирование производства, контроль качества через Rahman.</div></div>
+      </div>
+      <div class="stage" style="border-color:var(--gold);background:rgba(154,115,64,0.04);">
+        <div class="stage-num" style="color:var(--gold-l);">3</div>
+        <div><div class="stage-title">Stage 3 — 3–4 бригады · 12–15 проектов в неделю</div><div class="stage-text">Полный операционный масштаб. Система работает без ручного участия владельцев.</div></div>
+      </div>
+    </div>
+    <div class="note"><strong>Главный принцип:</strong> сначала система → потом масштаб.</div>
+    <a href="javascript:void(0)" onclick="window.scrollTo({top:0,behavior:'smooth'})" class="back">↑ Наверх</a>
+  </div>
+
+  <!-- 10 -->
+  <div class="block" id="s10">
+    <div class="block-eyebrow">10</div>
+    <div class="block-title">Risks <em>& Weak Points</em></div>
+    <div style="font-size:12px;color:var(--muted);margin-bottom:12px;">Основные слабые места:</div>
+    <div class="risk"><div class="risk-dot"></div><div class="risk-text">Плохой найм установщиков</div></div>
+    <div class="risk"><div class="risk-dot"></div><div class="risk-text">Отсутствие стандартов</div></div>
+    <div class="risk"><div class="risk-dot"></div><div class="risk-text">Отсутствие контроля качества</div></div>
+    <div class="risk"><div class="risk-dot"></div><div class="risk-text">Хаос в процессах</div></div>
+    <div class="risk"><div class="risk-dot"></div><div class="risk-text">Рост количества проектов быстрее, чем рост management capacity</div></div>
+    <div class="risk"><div class="risk-dot"></div><div class="risk-text">Владельцы слишком долго остаются внутри ручной операционки</div></div>
+    <a href="javascript:void(0)" onclick="window.scrollTo({top:0,behavior:'smooth'})" class="back">↑ Наверх</a>
+  </div>
+
+  <!-- 11 -->
+  <div class="block" id="s11">
+    <div class="block-eyebrow">11</div>
+    <div class="block-title">KPI <em>System</em></div>
+    <div style="font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:10px;font-weight:600;">Обязательно отслеживать</div>
+    <div class="kpi-grid" style="margin-bottom:16px;">
+      <div class="kpi">Lead to sale conversion</div>
+      <div class="kpi">Average ticket</div>
+      <div class="kpi">Crew utilization</div>
+      <div class="kpi">Project time</div>
+      <div class="kpi">Gross margin</div>
+      <div class="kpi">Quality incidents</div>
+    </div>
+    <div class="note" style="margin-bottom:14px;"><strong>Weekly review обязателен.</strong></div>
+    <div style="font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:10px;font-weight:600;">В weekly review — вопросы</div>
+    <ul class="checklist">
+      <li>Сколько лидов пришло</li>
+      <li>Сколько было закрыто</li>
+      <li>Какой средний чек</li>
+      <li>Сколько проектов выполнено</li>
+      <li>Какая реальная прибыль</li>
+      <li>Где были операционные потери</li>
+      <li>Какие crews показали лучшие и худшие результаты</li>
+    </ul>
+    <a href="javascript:void(0)" onclick="window.scrollTo({top:0,behavior:'smooth'})" class="back">↑ Наверх</a>
+  </div>
+
+  <!-- 12 -->
+  <div class="block" id="s12">
+    <div class="block-eyebrow">12</div>
+    <div class="block-title">Final Operating <em>Summary</em></div>
+    <div class="note" style="margin-bottom:14px;">Компания должна работать как система, а не как набор проектов.</div>
+    <div class="final-formula">
+      <div class="final-formula-text">System → Process → Teams → Scale</div>
+      <div class="final-formula-sub">Agai Actions не должен просто делать больше работ.<br>Agai Actions должен выстроить бизнес-машину.</div>
+    </div>
+    <div class="note" style="margin-top:14px;">В этой системе качество и скорость могут расти одновременно, а не конфликтовать друг с другом.</div>
+    <a href="javascript:void(0)" onclick="window.scrollTo({top:0,behavior:'smooth'})" class="back">↑ Наверх</a>
+  </div>
+
+</div>
+
+<script>
+function goTo(id){
+  var el=document.getElementById(id);
+  if(el) el.scrollIntoView({behavior:'smooth',block:'start'});
+}
+window.addEventListener('scroll',function(){
+  var btn=document.getElementById('scrollTop');
+  if(btn) btn.style.display=window.scrollY>300?'block':'none';
+});
+</script>
+</body>
+</html>
